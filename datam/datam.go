@@ -3,11 +3,13 @@ package datam
 import ()
 
 type Conn struct {
-	ConnName string
-	ConnIp   string
-	ConnPort string
-	ConnUser string
-	ConnPass string
+	Name string
+	Ip   string
+	Port string
+	User string
+	Pass string
+        Dbname string
+	Dbtype string
 }
 
-type ConnList []Conn
+type ConnList [10]Conn
