@@ -1,0 +1,43 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"sxdbman/datam"
+	"sxdbman/tools"
+//	 "github.com/go-redis/redis/v8"
+)
+
+func main() {
+
+	fmt.Println("Hello,DbMan")
+        // go install github.com/cosmtrek/air@latest
+	// https://blog.csdn.net/u013317445/article/details/114841853 struct slice
+	mc := datam.Conn{"id1","rockymysql", "127.0.0.1", "3306", "sxadmin", "sx@123", "sxdbman", "mysql"}
+	//mcl := make([]datam.Conn, 1000)
+	mc1 := datam.Conn{"id2","ljpmysql", "127.0.0.1", "3306", "sxadmin", "sx@123", "sxdbman", "mysql"}
+	var mcl datam.ConnList
+	//append(mcl,myconn)
+	mcl[0] = mc
+	mcl[1] = mc1
+	fmt.Println(mc)
+	fmt.Println(mcl)
+	fmt.Println(len(mcl))
+	fmt.Println(cap(mcl))
+	///////////////////////////JSON/////////////////////////////
+	// https://blog.csdn.net/togolife/article/details/121776683
+	v, err := json.Marshal(mc)
+	if err != nil {
+		fmt.Println("marshal failed!", err)
+		return
+	}
+	fmt.Println("marsha result: ", string(v))
+
+	/////////////////Redis///////////////////////////////
+	// https://juejin.cn/post/6844903814571491335
+	// 声明一个全局的redisDb变量
+        tools.InitRedis()       
+	fmt.Println("Redis连接成功")
+
+	////////////////////////////////////////////////////////////
+}

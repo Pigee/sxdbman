@@ -1,42 +1,32 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"sxdbman/datam"
-	"sxdbman/tools"
-//	 "github.com/go-redis/redis/v8"
+	badger "github.com/dgraph-io/badger/v4"
+	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func main() {
+	ginping()
+}
 
-	fmt.Println("Hello,DbMan")
-	// https://blog.csdn.net/u013317445/article/details/114841853 struct slice
-	mc := datam.Conn{"id1","rockymysql", "127.0.0.1", "3306", "sxadmin", "sx@123", "sxdbman", "mysql"}
-	//mcl := make([]datam.Conn, 1000)
-	mc1 := datam.Conn{"id2","ljpmysql", "127.0.0.1", "3306", "sxadmin", "sx@123", "sxdbman", "mysql"}
-	var mcl datam.ConnList
-	//append(mcl,myconn)
-	mcl[0] = mc
-	mcl[1] = mc1
-	fmt.Println(mc)
-	fmt.Println(mcl)
-	fmt.Println(len(mcl))
-	fmt.Println(cap(mcl))
-	///////////////////////////JSON/////////////////////////////
-	// https://blog.csdn.net/togolife/article/details/121776683
-	v, err := json.Marshal(mc)
+func ginping() {
+
+	r := gin.Default()
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+	r.Run(":9999") // list
+
+}
+
+func getbadgerdb() {
+	db, err := badger.Open(badger.DefaultOptions("./resources/badger"))
 	if err != nil {
-		fmt.Println("marshal failed!", err)
-		return
+		log.Fatal(err)
 	}
-	fmt.Println("marsha result: ", string(v))
+	defer db.Close()
 
-	/////////////////Redis///////////////////////////////
-	// https://juejin.cn/post/6844903814571491335
-	// 声明一个全局的redisDb变量
-        tools.InitRedis()       
-	fmt.Println("Redis连接成功")
-
-	////////////////////////////////////////////////////////////
 }
