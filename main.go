@@ -4,9 +4,11 @@ import (
 	badger "github.com/dgraph-io/badger/v4"
 	"github.com/gin-gonic/gin"
 	"log"
+        "net/http"
 )
 
 func main() {
+
 	ginping()
 }
 
@@ -18,6 +20,15 @@ func ginping() {
 			"message": "pong",
 		})
 	})
+
+        r.LoadHTMLGlob("templates/*")
+	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
+	r.GET("/index", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"title": "Main website",
+		})
+	})
+
 	r.Run(":9999") // list
 
 }
